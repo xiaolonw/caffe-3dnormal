@@ -24,7 +24,6 @@ void ReshapeBlockLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   const int patch_width = this->layer_param_.reshape_block_param().new_patch_width();
   const int patch_height = this->layer_param_.reshape_block_param().new_patch_height();
 
-  int num = bottom[0]->num();
   int channel = bottom[0]->channels();
   int height = bottom[0]->height();
   int width = bottom[0]->width();
@@ -86,7 +85,7 @@ void ReshapeBlockLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 			{
 				int nowh  = offh + nh, noww = offw + nw;
 				int idout = nc * out_height * out_width + nowh * out_width + noww;
-				int idin  = cnt; //nw * patch_height * out_channel + nh * out_channel + nc;
+				//int idin  = cnt; //nw * patch_height * out_channel + nh * out_channel + nc;
 				int idin2 = cnt * height * width + h * width + w;
 
 				top_data_now[idout] = bottom_data_now[idin2];
@@ -104,7 +103,7 @@ void ReshapeBlockLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
 {
 
 	const Dtype* top_diff = top[0]->cpu_diff();
-	const Dtype* bottom_data = bottom[0]->cpu_data();
+	//const Dtype* bottom_data = bottom[0]->cpu_data();
 	Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
 
 	const int out_channel = this->layer_param_.reshape_block_param().new_channel();
@@ -138,7 +137,7 @@ void ReshapeBlockLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
 			{
 				int nowh  = offh + nh, noww = offw + nw;
 				int idout = nc * out_height * out_width + nowh * out_width + noww;
-				int idin  = cnt; //nw * patch_height * out_channel + nh * out_channel + nc;
+				//int idin  = cnt; //nw * patch_height * out_channel + nh * out_channel + nc;
 				int idin2 = cnt * height * width + h * width + w;
 
 				bottom_diff_now[idin2] = top_diff_now[idout];
