@@ -16,7 +16,7 @@ template <typename Dtype>
 void ReshapeBlockLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 	    const vector<Blob<Dtype>*>& top) {
   CHECK_EQ(bottom.size(), 1) << "IP Layer takes a single blob as input.";
-  CHECK_EQ(top->size(), 1) << "IP Layer takes a single blob as output.";
+  CHECK_EQ(top.size(), 1) << "IP Layer takes a single blob as output.";
 
   const int out_channel = this->layer_param_.reshape_block_param().new_channel();
   const int out_height = this->layer_param_.reshape_block_param().new_height();
@@ -51,7 +51,7 @@ void ReshapeBlockLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 	      const vector<Blob<Dtype>*>& top) {
 
     const Dtype* bottom_data = bottom[0]->cpu_data();
-    const Dtype* top_data = top[0]->mutable_cpu_data();
+    Dtype* top_data = top[0]->mutable_cpu_data();
 
     const int out_channel = this->layer_param_.reshape_block_param().new_channel();
     const int out_height = this->layer_param_.reshape_block_param().new_height();
