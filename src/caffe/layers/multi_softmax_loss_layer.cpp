@@ -41,12 +41,11 @@ void MultiSoftmaxWithLossLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& b
 {
 	// The forward pass computes the softmax prob values.
 	softmax_bottom_vec_[0] = bottom[0];
-	softmax_layer_->Forward(softmax_bottom_vec_, &softmax_top_vec_);
+	softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
 	const Dtype* prob_data = prob_.cpu_data();
 	const Dtype* label = bottom[1]->cpu_data();
 	int num = prob_.num();
 	int dim = prob_.count() / num;
-	int dimClass = bottom[0]->channels();
 	int height = bottom[0]->height();
 	int width  = bottom[0]->width();
 	int imgSize = height * width;
@@ -74,7 +73,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
 	const Dtype* label = bottom[1]->cpu_data();
 	int num = prob_.num();
 	int dim = prob_.count() / num;
-	int dimClass = bottom[0]->channels();
+	//int dimClass = bottom[0]->channels();
 	int height = bottom[0]->height();
 	int width  = bottom[0]->width();
 	int imgSize = height * width;
