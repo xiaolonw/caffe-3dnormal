@@ -1078,6 +1078,7 @@ message V1LayerParameter {
     // added by wxl
     RESHAPE_BLOCK = 40;
     DECODE =  41;
+    RESIZE = 42;
     
   }
   optional LayerType type = 5;

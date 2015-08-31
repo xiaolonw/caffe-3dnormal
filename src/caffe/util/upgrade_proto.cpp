@@ -520,6 +520,8 @@ V1LayerParameter_LayerType UpgradeV0LayerType(const string& type) {
 	return V1LayerParameter_LayerType_RESHAPE_BLOCK;
   } else if (type == "decode") {
   	return V1LayerParameter_LayerType_DECODE;
+  } else if (type == "resize") {
+	return V1LayerParameter_LayerType_RESIZE;
   } else {
     LOG(FATAL) << "Unknown layer name: " << type;
     return V1LayerParameter_LayerType_NONE;
@@ -941,6 +943,8 @@ const char* UpgradeV1LayerType(const V1LayerParameter_LayerType type) {
 	return "ReshapeBlock";
   case V1LayerParameter_LayerType_DECODE:
   	return "Decode";
+  case V1LayerParameter_LayerType_RESIZE:
+    return "Resize";
   default:
     LOG(FATAL) << "Unknown V1LayerParameter layer type: " << type;
     return "";
