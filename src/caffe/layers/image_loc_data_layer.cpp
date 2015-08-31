@@ -11,6 +11,11 @@
 #include <utility>
 #include <vector>
 
+
+#include <cv.h>
+#include <highgui.h>
+#include <cxcore.h>
+
 #include "caffe/data_layers.hpp"
 #include "caffe/layer.hpp"
 #include "caffe/util/benchmark.hpp"
@@ -20,9 +25,6 @@
 #include "caffe/vision_layers.hpp"
 #include "caffe/proto/caffe.pb.h"
 
-#include <cv.h>
-#include <highgui.h>
-#include <cxcore.h>
 
 using std::iterator;
 using std::string;
@@ -197,7 +199,7 @@ void ImageLocDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom
   }
   else
   {
-	  LOG(ERROR) << "should crop" << endl;
+	  LOG(ERROR) << "should crop" ;
 	  //top_shape.push_back(1); top_shape.push_back(datum.channels());
 	  //top_shape.push_back(datum.height()); top_shape.push_back(datum.width());
   }
@@ -231,7 +233,7 @@ void ImageLocDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom
   }
   else
   {
-	  LOG(ERROR) << "should have mean" << endl;
+	  LOG(ERROR) << "should have mean" ;
   }
   data_mean_.cpu_data();
 
@@ -263,7 +265,7 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   const int crop_size = this->layer_param_.image_loc_data_param().crop_size();
 
 
-  const Dtype* mean = layer->data_mean_.cpu_data();
+  const Dtype* mean = data_mean_.cpu_data();
   Datum datum;
   if (!LocReadImageToDatum(lines_[lines_id_], new_height, new_width, &datum))
   {
@@ -280,7 +282,7 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
 	}
 	else
 	{
-	  LOG(ERROR) << "should crop" << endl;
+	  LOG(ERROR) << "should crop" ;
 	  //top_shape.push_back(1); top_shape.push_back(datum.channels());
 	  //top_shape.push_back(datum.height()); top_shape.push_back(datum.width());
 	}
@@ -294,6 +296,8 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
 	const int slide_stride = image_loc_data_param.slide_stride();
 	int hnum = new_height / slide_stride;
 	int wnum = new_width / slide_stride;
+	int height = new_height;
+	int width  = new_width;
 	CHECK_EQ(hnum * wnum, batch_size);
 	int item_id = 0;
 	for (int gh = 0; gh < hnum; gh++)
