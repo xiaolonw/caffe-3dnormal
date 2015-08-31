@@ -124,7 +124,8 @@ bool ReadImageToDatum(const string& filename, const int label,
       cv::imencode("."+encoding, cv_img, buf);
       datum->set_data(std::string(reinterpret_cast<char*>(&buf[0]),
                       buf.size()));
-      datum->set_label(label);
+      datum->clear_label();
+      datum->add_label(label);
       datum->set_encoded(true);
       return true;
     }
