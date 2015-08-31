@@ -1082,6 +1082,7 @@ message V1LayerParameter {
     NORM = 43;
     MULTI_SOFTMAX = 44;
     MULTI_SOFTMAX_LOSS = 45;
+    IMAGE_LOC_DATA = 46;
     
   }
   optional LayerType type = 5;

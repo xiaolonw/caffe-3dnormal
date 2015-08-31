@@ -528,6 +528,8 @@ V1LayerParameter_LayerType UpgradeV0LayerType(const string& type) {
 	return V1LayerParameter_LayerType_MULTI_SOFTMAX;
   } else if (type == "multi_softmax_loss") {
 	return V1LayerParameter_LayerType_MULTI_SOFTMAX_LOSS;
+  } else if (type == "images_loc") {
+	return V1LayerParameter_LayerType_IMAGE_LOC_DATA;
   } else {
     LOG(FATAL) << "Unknown layer name: " << type;
     return V1LayerParameter_LayerType_NONE;
@@ -557,6 +559,13 @@ bool NetNeedsDataUpgrade(const NetParameter& net_param) {
       if (layer_param.has_crop_size()) { return true; }
       if (layer_param.has_mirror()) { return true; }
     }
+    if (net_param.layers(i).type() == V1LayerParameter_LayerType_IMAGE_LOC_DATA) {
+    	ImageLocDataParameter layer_param = net_param.layers(i).image_loc_data_param();
+	  if (layer_param.has_scale()) { return true; }
+	  if (layer_param.has_mean_file()) { return true; }
+	  if (layer_param.has_crop_size()) { return true; }
+	  if (layer_param.has_mirror()) { return true; }
+	}
   }
   return false;
 }
@@ -592,6 +601,7 @@ void UpgradeNetDataTransformation(NetParameter* net_param) {
     CONVERT_LAYER_TRANSFORM_PARAM(DATA, Data, data);
     CONVERT_LAYER_TRANSFORM_PARAM(IMAGE_DATA, ImageData, image_data);
     CONVERT_LAYER_TRANSFORM_PARAM(WINDOW_DATA, WindowData, window_data);
+    CONVERT_LAYER_TRANSFORM_PARAM(IMAGE_LOC_DATA, ImageLocData, image_loc_data);
   }
 }
 
@@ -957,6 +967,8 @@ const char* UpgradeV1LayerType(const V1LayerParameter_LayerType type) {
 	return "MultiSoftmax";
   case V1LayerParameter_LayerType_MULTI_SOFTMAX_LOSS:
 	return "MultiSoftmaxWithLoss";
+  case V1LayerParameter_LayerType_IMAGE_LOC_DATA:
+    return "ImageLocData";
   default:
     LOG(FATAL) << "Unknown V1LayerParameter layer type: " << type;
     return "";
