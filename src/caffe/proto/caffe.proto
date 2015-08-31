@@ -1080,6 +1080,8 @@ message V1LayerParameter {
     DECODE =  41;
     RESIZE = 42;
     NORM = 43;
+    MULTI_SOFTMAX = 44;
+    MULTI_SOFTMAX_LOSS = 45;
     
   }
   optional LayerType type = 5;

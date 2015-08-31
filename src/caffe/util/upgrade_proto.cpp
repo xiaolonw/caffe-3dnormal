@@ -524,6 +524,10 @@ V1LayerParameter_LayerType UpgradeV0LayerType(const string& type) {
 	return V1LayerParameter_LayerType_RESIZE;
   } else if (type == "norm") {
 	return V1LayerParameter_LayerType_NORM;
+  } else if (type == "multi_softmax") {
+	return V1LayerParameter_LayerType_MULTI_SOFTMAX;
+  } else if (type == "multi_softmax_loss") {
+	return V1LayerParameter_LayerType_MULTI_SOFTMAX_LOSS;
   } else {
     LOG(FATAL) << "Unknown layer name: " << type;
     return V1LayerParameter_LayerType_NONE;
@@ -949,6 +953,10 @@ const char* UpgradeV1LayerType(const V1LayerParameter_LayerType type) {
     return "Resize";
   case V1LayerParameter_LayerType_NORM:
     return "Norm";
+  case V1LayerParameter_LayerType_MULTI_SOFTMAX:
+	return "MultiSoftmax";
+  case V1LayerParameter_LayerType_MULTI_SOFTMAX_LOSS:
+	return "MultiSoftmaxWithLoss";
   default:
     LOG(FATAL) << "Unknown V1LayerParameter layer type: " << type;
     return "";
