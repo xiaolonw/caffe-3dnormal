@@ -23,7 +23,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bo
 	softmax_bottom_vec_.clear();
 	softmax_bottom_vec_.push_back(bottom[0]);
 	softmax_top_vec_.push_back(&prob_);
-	softmax_layer_->SetUp(softmax_bottom_vec_, &softmax_top_vec_);
+	softmax_layer_->SetUp(softmax_bottom_vec_, softmax_top_vec_);
 }
 
 template<typename Dtype>
