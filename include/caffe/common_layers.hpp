@@ -488,6 +488,9 @@ class DecodeLayer : public Layer<Dtype> {
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
+  vector<vector<int> > triIDs;
+  vector<vector<float> > dict;
+
 };
 
 
