@@ -140,9 +140,7 @@ void ImageLocDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom
   const int new_height = this->layer_param_.image_loc_data_param().new_height();
   const int new_width  = this->layer_param_.image_loc_data_param().new_width();
   const bool is_color  = this->layer_param_.image_loc_data_param().is_color();
-  string root_folder = this->layer_param_.image_loc_data_param().root_folder();
-
-  const int slide_stride = this->layer_param_.image_loc_data_param().slide_stride();
+  //string root_folder = this->layer_param_.image_loc_data_param().root_folder();
   const int source_num = this->layer_param_.image_loc_data_param().source_num();
 
   CHECK((new_height == 0 && new_width == 0) ||
@@ -260,10 +258,9 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   const int batch_size = image_loc_data_param.batch_size();
   const int new_height = image_loc_data_param.new_height();
   const int new_width = image_loc_data_param.new_width();
-  const bool is_color = image_loc_data_param.is_color();
-  string root_folder = image_loc_data_param.root_folder();
+  //string root_folder = image_loc_data_param.root_folder();
   const int crop_size = this->layer_param_.image_loc_data_param().crop_size();
-
+  const int lines_size = lines_.size();
 
   const Dtype* mean = data_mean_.cpu_data();
   Datum datum;
@@ -298,6 +295,7 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
 	int wnum = new_width / slide_stride;
 	int height = new_height;
 	int width  = new_width;
+	int channels = datum.channels();
 	CHECK_EQ(hnum * wnum, batch_size);
 	int item_id = 0;
 	for (int gh = 0; gh < hnum; gh++)
@@ -326,7 +324,7 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
 							&& w + w_off >= 0 && w + w_off < width)
 						datum_element = datum.float_data(data_index);
 					prefetch_data[top_index] = ((datum_element)
-							- mean[mean_index]) * scale;
+							- mean[mean_index]);
 
 
 				}
@@ -335,7 +333,7 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
 		CHECK(datum.label_size() == 1);
 		for (int label_i = 0; label_i < datum.label_size(); label_i++)
 		{
-			top_label[item_id * datum.label_size() + label_i] = datum.label(
+			prefetch_label[item_id * datum.label_size() + label_i] = datum.label(
 					label_i);
 		}
 		item_id++;
