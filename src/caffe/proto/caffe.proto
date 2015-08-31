@@ -389,6 +389,9 @@ message LayerParameter {
   
   // added by wxl
   optional ReshapeBlockParameter reshape_block_param = 139;
+  optional DecodeParameter decode_param = 140;
+  optional ResizeParameter resize_param = 141;
+  optional ImageLocDataParameter image_loc_data_param = 142;
 }
 
 // Message that stores parameters used to apply transformation
@@ -661,6 +664,42 @@ message ImageDataParameter {
   // data.
   optional bool mirror = 6 [default = false];
   optional string root_folder = 12 [default = ""];
+}
+
+
+// Message that stores parameters used by ImageDataLayer
+message ImageLocDataParameter {
+  // Specify the data source.
+  optional string source = 1;
+  // For data pre-processing, we can do simple scaling and subtracting the
+  // data mean, if provided. Note that the mean subtraction is always carried
+  // out before scaling.
+  optional float scale = 2 [default = 1];
+  optional string mean_file = 3;
+  // Specify the batch size.
+  optional uint32 batch_size = 4;
+  // the sliding window size
+  optional uint32 crop_size = 5 [default = 0];
+  // Specify if we want to randomly mirror data.
+  optional bool mirror = 6 [default = false];
+  // The rand_skip variable is for the data layer to skip a few data points
+  // to avoid all asynchronous sgd clients to start at the same point. The skip
+  // point would be set as rand_skip * rand(0,1). Note that rand_skip should not
+  // be larger than the number of keys in the leveldb.
+  optional uint32 rand_skip = 7 [default = 0];
+  // Whether or not ImageLayer should shuffle the list of files at every epoch.
+  optional bool shuffle = 8 [default = false];
+  // It will also resize images if new_height or new_width are not zero.
+  optional uint32 new_height = 9 [default = 0];
+  optional uint32 new_width = 10 [default = 0];
+  
+  // added by wxl
+  optional uint32 new_height_2 = 11 [default = 0];
+  optional uint32 new_width_2 = 12 [default = 0];
+  optional string mean_file_2 = 13;
+  
+  optional uint32 source_num = 14;
+  optional uint32 slide_stride = 15;
 }
 
 message InfogainLossParameter {
@@ -1038,6 +1077,7 @@ message V1LayerParameter {
     
     // added by wxl
     RESHAPE_BLOCK = 40;
+    DECODE =  41;
     
   }
   optional LayerType type = 5;
@@ -1085,6 +1125,9 @@ message V1LayerParameter {
   
   // added by wxl 
   optional ReshapeBlockParameter reshape_block_param = 43;
+  optional DecodeParameter decode_param = 44;
+  optional ResizeParameter resize_param = 45;
+  optional ImageLocDataParameter image_loc_data_param = 46;
   
 }
 
@@ -1098,6 +1141,19 @@ message ReshapeBlockParameter {
   
 }
 
+message ResizeParameter{
+	optional uint32 height = 1;
+	optional uint32 width = 2;
+	optional bool  is_pyramid_test = 3 [default = false];
+	optional float out_height_scale = 4;
+	optional float out_width_scale = 5;
+}
+
+message DecodeParameter{
+	optional string source_dict = 1; 
+	optional string source_triids = 2; 
+	optional bool usesoft = 3 [default = false];
+}
 
 // DEPRECATED: V0LayerParameter is the old way of specifying layer parameters
 // in Caffe.  We keep this message type around for legacy support.
