@@ -1079,6 +1079,7 @@ message V1LayerParameter {
     RESHAPE_BLOCK = 40;
     DECODE =  41;
     RESIZE = 42;
+    NORM = 43;
     
   }
   optional LayerType type = 5;
