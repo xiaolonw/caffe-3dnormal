@@ -139,7 +139,7 @@ void ImageLocDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom
       const vector<Blob<Dtype>*>& top) {
   const int new_height = this->layer_param_.image_loc_data_param().new_height();
   const int new_width  = this->layer_param_.image_loc_data_param().new_width();
-  const bool is_color  = this->layer_param_.image_loc_data_param().is_color();
+  //const bool is_color  = this->layer_param_.image_loc_data_param().is_color();
   //string root_folder = this->layer_param_.image_loc_data_param().root_folder();
   const int source_num = this->layer_param_.image_loc_data_param().source_num();
 
