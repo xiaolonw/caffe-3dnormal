@@ -99,6 +99,6 @@ STUB_GPU(MultiSoftmaxWithLossLayer);
 #endif
 
 INSTANTIATE_CLASS(MultiSoftmaxWithLossLayer);
-REGISTER_LAYER_CLASS(MultiSoftmaxWithLossLayer);
+REGISTER_LAYER_CLASS(MultiSoftmaxWithLoss);
 
 }  // namespace caffe
