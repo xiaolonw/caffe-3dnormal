@@ -130,7 +130,8 @@ bool ReadImageToDatum(const string& filename, const int label,
       return true;
     }
     CVMatToDatum(cv_img, datum);
-    datum->set_label(label);
+    datum->clear_label();
+    datum->add_label(label);
     return true;
   } else {
     return false;
@@ -149,7 +150,8 @@ bool ReadFileToDatum(const string& filename, const int label,
     file.read(&buffer[0], size);
     file.close();
     datum->set_data(buffer);
-    datum->set_label(label);
+    datum->clear_label();
+    datum->add_label(label);
     datum->set_encoded(true);
     return true;
   } else {
