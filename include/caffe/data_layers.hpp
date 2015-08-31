@@ -263,7 +263,7 @@ class ImageLocDataLayer : public BasePrefetchingDataLayer<Dtype> {
  public:
   explicit ImageLocDataLayer(const LayerParameter& param)
       : BasePrefetchingDataLayer<Dtype>(param) {}
-  virtual ~ImageDataLayer();
+  virtual ~ImageLocDataLayer();
   virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
 
