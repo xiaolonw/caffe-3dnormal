@@ -268,7 +268,6 @@ void ImageLocDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   {
   		string filename = lines_[lines_id_][0];
   		LOG(ERROR) << "Could not fretch file " << filename;
-  		return reinterpret_cast<void*>(NULL);
   }
 
 	vector<int> top_shape;
