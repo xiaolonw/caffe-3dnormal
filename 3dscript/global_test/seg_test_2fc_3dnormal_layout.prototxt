@@ -166,7 +166,7 @@ layer {
 
 
 
-layers {
+layer {
   name: "reshape_3d"
   type: "ReshapeBlock"
   bottom: "fc8_coarse"
@@ -180,14 +180,14 @@ layers {
   }
 }
 
-layers {
+layer {
   name: "prob_3d"
   type: "MultiSoftmax"
   bottom: "reshape_3d"
   top: "prob_3d"
 }
 
-layers {
+layer {
   name: "decode_3d"
   type: "Decode"
   bottom: "prob_3d"
@@ -199,7 +199,7 @@ layers {
   }
 }
 
-layers {
+layer {
   name: "resize_3d"
   type: "Resize"
   bottom: "decode_3d"
@@ -211,14 +211,14 @@ layers {
 }
 
 
-layers {
+layer {
   name: "norm_3d"
   type: "Norm"
   bottom: "resize_3d"
   top: "norm_3d"
 }
 
-layers {
+layer {
   name: "prob_layout"
   type: "Softmax"
   bottom: "fc8_layout"
@@ -226,10 +226,10 @@ layers {
 }
 
 
-layers {
-  top: "accuracy"
-  name: "accuracy"
-  type: "Accuracy"
+layer {
+  top: "predict"
+  name: "predict"
+  type: "Predict"
   bottom: "norm_3d"
   bottom: "prob_layout"
   bottom: "label"
