@@ -136,7 +136,10 @@ int main(int argc, char** argv)
 	Blob<float>* c1 = (*(caffe_test_net.bottom_vecs().rbegin()))[0];
     int c2 = c1->num();
 	int batchCount = std::ceil(data_counts / (floor)(c2));
+	printf("normals: %d %d %d %d\n", c1->num(), c1->channels(), c1->height(), c1->width());
 
+	c1 = (*(caffe_test_net.bottom_vecs().rbegin()))[1];
+	printf("layouts: %d %d %d %d\n", c1->num(), c1->channels(), c1->height(), c1->width());
 
 	for (int batch_id = 0; batch_id < batchCount; ++batch_id)
 	{
