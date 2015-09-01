@@ -119,7 +119,6 @@ class PredictLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top);
 
   virtual inline const char* type() const { return "Predict"; }
-
  protected:
 
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
