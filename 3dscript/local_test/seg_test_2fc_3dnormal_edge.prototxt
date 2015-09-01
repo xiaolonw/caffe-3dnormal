@@ -8,7 +8,7 @@ layer {
     phase: TEST
   }
   image_loc_data_param {
-    source: "/nfs/hn46/xiaolonw/cnncode/viewer/testLabels_20.txt"
+    source: "/nfs/hn46/xiaolonw/cnncode/viewer/testLabels_loc.txt"
     mean_file: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/local_model/3d_mean.binaryproto"
     batch_size: 300
     crop_size: 55
