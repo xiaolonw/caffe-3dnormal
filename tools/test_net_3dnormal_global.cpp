@@ -104,11 +104,18 @@ int main(int argc, char** argv)
 	Caffe::set_mode(Caffe::GPU);
 	Caffe::SetDevice(3);
 
+	/*
 	std::string test_net_param_s(argv[1]);
 	Net<float> caffe_test_net(test_net_param_s, caffe::TEST);
 	NetParameter trained_net_param;
 	ReadProtoFromBinaryFile(argv[2], &trained_net_param);
 	caffe_test_net.CopyTrainedLayersFrom(trained_net_param);
+	*/
+
+	std::string test_net_param_s(argv[1]);
+	Net<float> caffe_test_net(test_net_param_s, caffe::TEST);
+	std::string load_net_param_s(argv[2]);
+	caffe_test_net.CopyTrainedLayersFrom(load_net_param_s);
 
 
 	string labelFile(argv[3]);
