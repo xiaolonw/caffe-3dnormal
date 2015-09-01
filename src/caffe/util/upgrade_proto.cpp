@@ -530,6 +530,8 @@ V1LayerParameter_LayerType UpgradeV0LayerType(const string& type) {
 	return V1LayerParameter_LayerType_MULTI_SOFTMAX_LOSS;
   } else if (type == "images_loc") {
 	return V1LayerParameter_LayerType_IMAGE_LOC_DATA;
+  } else if (type == "predict") {
+	return V1LayerParameter_LayerType_PREDICT;
   } else {
     LOG(FATAL) << "Unknown layer name: " << type;
     return V1LayerParameter_LayerType_NONE;
@@ -969,6 +971,8 @@ const char* UpgradeV1LayerType(const V1LayerParameter_LayerType type) {
 	return "MultiSoftmaxWithLoss";
   case V1LayerParameter_LayerType_IMAGE_LOC_DATA:
     return "ImageLocData";
+  case V1LayerParameter_LayerType_PREDICT:
+    return "Predict";
   default:
     LOG(FATAL) << "Unknown V1LayerParameter layer type: " << type;
     return "";
