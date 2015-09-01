@@ -10,15 +10,14 @@ layer {
   transform_param {
     mirror: false
     crop_size: 55
-    mean_file: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/3d_mean.binaryproto"
+    mean_file: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/global_model/3d_mean.binaryproto"
   }
   image_data_param {
-    source: "/home/dragon123/3dnormal_joint_cnncode/imgfile_global.txt"
+    source: "/nfs/hn46/xiaolonw/cnncode/viewer/testLabels_single.txt"
     batch_size: 10
     new_height: 55
     new_width: 55
     shuffle: false
-    mirror: false
   }
 }
 
@@ -168,10 +167,10 @@ layer {
 
 
 layers {
-  name: "reshape_global"
+  name: "reshape_3d"
   type: "ReshapeBlock"
   bottom: "fc8_coarse"
-  top: "reshape_global"
+  top: "reshape_3d"
   reshape_block_param {
     new_channel: 20 
     new_height: 20
@@ -182,29 +181,29 @@ layers {
 }
 
 layers {
-  name: "prob_3dnorm"
+  name: "prob_3d"
   type: "MultiSoftmax"
-  bottom: "reshape_global"
-  top: "prob_3dnorm"
+  bottom: "reshape_3d"
+  top: "prob_3d"
 }
 
 layers {
-  name: "decode_global"
+  name: "decode_3d"
   type: "Decode"
-  bottom: "prob_3dnorm"
-  top: "decode_global"
+  bottom: "prob_3d"
+  top: "decode_3d"
   decode_param {
-    source_dict: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/codebook_20.txt"
-    source_triids: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/triangles_20.txt"
+    source_dict: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/global_model/codebook_20.txt"
+    source_triids: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/global_model/triangles_20.txt"
     # usesoft: true
   }
 }
 
 layers {
-  name: "resize_global"
+  name: "resize_3d"
   type: "Resize"
-  bottom: "decode_global"
-  top: "resize_global"
+  bottom: "decode_3d"
+  top: "resize_3d"
   resize_param {
     height: 195
     width: 260
@@ -213,17 +212,17 @@ layers {
 
 
 layers {
-  name: "norm_global"
+  name: "norm_3d"
   type: "Norm"
-  bottom: "resize_global"
-  top: "norm_global"
+  bottom: "resize_3d"
+  top: "norm_3d"
 }
 
 layers {
-  name: "prob_3dnorm_2"
+  name: "prob_layout"
   type: "Softmax"
   bottom: "fc8_layout"
-  top: "prob_3dnorm_2"
+  top: "prob_layout"
 }
 
 
@@ -231,8 +230,8 @@ layers {
   top: "accuracy"
   name: "accuracy"
   type: "Accuracy"
-  bottom: "norm_global"
-  bottom: "prob_3dnorm_2"
+  bottom: "norm_3d"
+  bottom: "prob_layout"
   bottom: "label"
 }
 
