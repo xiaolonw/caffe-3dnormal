@@ -45,7 +45,7 @@ void AccuracyLayer<Dtype>::Reshape(
     top[1]->Reshape(top_shape_per_class);
     nums_buffer_.Reshape(top_shape_per_class);
   }*/
-  top[0]->Reshape(1, 2, 1, 1);
+  top[0]->Reshape(1, 1, 1, 1);
 }
 
 template <typename Dtype>
