@@ -1,0 +1,224 @@
+name: "GlobalNet" 
+layer {
+  name: "data"
+  type: "ImageLocData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  image_loc_data_param {
+    source: "/nfs/hn46/xiaolonw/3dnormal_joint_cnncode/testfusion.txt"
+    mean_file: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/fusion_model/3d_mean.binaryproto"
+    batch_size: 300
+    crop_size: 55
+    mirror: false
+    shuffle: false
+    source_num : 6
+    slide_stride: 13
+    new_height: 195
+    new_width: 260
+  }
+  
+}
+
+
+layer {
+  name: "conv2_55"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv2_55"
+  convolution_param {
+    num_output: 64
+    kernel_size: 5
+  }
+}
+layer {
+  name: "relu2_55"
+  type: "ReLU"
+  bottom: "conv2_55"
+  top: "conv2_55"
+}
+
+layer {
+  name: "pool2_55"
+  type: "Pooling"
+  bottom: "conv2_55"
+  top: "pool2_55"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "norm2_55"
+  type: "LRN"
+  bottom: "pool2_55"
+  top: "norm2_55"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+
+
+layer {
+  name: "conv3_55"
+  type: "Convolution"
+  bottom: "norm2_55"
+  top: "conv3_55"
+  convolution_param {
+    num_output: 192
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  name: "relu3_55"
+  type: "ReLU"
+  bottom: "conv3_55"
+  top: "conv3_55"
+}
+
+layer {
+  name: "pool3_55"
+  type: "Pooling"
+  bottom: "conv3_55"
+  top: "pool3_55"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "norm3_55"
+  type: "LRN"
+  bottom: "pool3_55"
+  top: "norm3_55"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+
+layer {
+  name: "conv4_55"
+  type: "Convolution"
+  bottom: "norm3_55"
+  top: "conv4_55"
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "relu4_55"
+  type: "ReLU"
+  bottom: "conv4_55"
+  top: "conv4_55"
+}
+
+layer {
+  name: "conv5_55"
+  type: "Convolution"
+  bottom: "conv4_55"
+  top: "conv5_55"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "relu5_55"
+  type: "ReLU"
+  bottom: "conv5_55"
+  top: "conv5_55"
+}
+
+
+layer {
+  name: "fc7_55"
+  type: "InnerProduct"
+  bottom: "conv5_55"
+  top: "fc7_55"
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu7_55"
+  type: "ReLU"
+  bottom: "fc7_55"
+  top: "fc7_55"
+}
+
+layer {
+  name: "fc8_3dnorm"
+  type: "InnerProduct"
+  bottom: "fc7_55"
+  top: "fc8_3dnorm"
+  inner_product_param {
+    num_output: 6760
+  }
+}
+
+
+layer {
+  name: "reshape_3d"
+  type: "ReshapeBlock"
+  bottom: "fc8_3dnorm"
+  top: "reshape_3d"
+  reshape_block_param {
+    new_channel: 40 
+    new_height: 13
+    new_width: 13
+    new_patch_width: 13
+    new_patch_height: 13
+  }
+}
+
+layer {
+  name: "prob_3d"
+  type: "MultiSoftmax"
+  bottom: "reshape_3d"
+  top: "prob_3d"
+}
+
+layer {
+  name: "decode_3d"
+  type: "Decode"
+  bottom: "prob_3d"
+  top: "decode_3d"
+  decode_param {
+    source_dict: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/local_model/codebook_40.txt"
+    source_triids: "/nfs/ladoga_no_backups/users/xiaolonw/3dnormal_release/local_model/triangles_40.txt"
+    # usesoft: true
+  }
+}
+
+
+layer {
+  name: "norm_3d"
+  type: "Norm"
+  bottom: "decode_3d"
+  top: "norm_3d"
+}
+
+layer {
+  top: "predict"
+  name: "predict"
+  type: "Predict"
+  bottom: "norm_3d"
+  bottom: "label"
+}
+
+
+
