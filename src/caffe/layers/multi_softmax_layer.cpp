@@ -146,5 +146,5 @@ void MultiSoftmaxLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
 }
 
 INSTANTIATE_CLASS(MultiSoftmaxLayer);
-
+REGISTER_LAYER_CLASS(MultiSoftmax);
 }  // namespace caffe
