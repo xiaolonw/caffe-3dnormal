@@ -1,0 +1,240 @@
+name: "GlobalNet" 
+layer {
+  name: "data"
+  type: "ImageData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mirror: false
+    crop_size: 55
+    mean_file: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/3d_mean.binaryproto"
+  }
+  image_data_param {
+    source: "/home/dragon123/3dnormal_joint_cnncode/imgfile_global.txt"
+    batch_size: 10
+    new_height: 55
+    new_width: 55
+    shuffle: false
+    mirror: false
+  }
+}
+
+
+layer {
+  name: "conv2_55"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv2_55"
+  convolution_param {
+    num_output: 64
+    kernel_size: 5
+  }
+}
+layer {
+  name: "relu2_55"
+  type: "ReLU"
+  bottom: "conv2_55"
+  top: "conv2_55"
+}
+
+layer {
+  name: "pool2_55"
+  type: "Pooling"
+  bottom: "conv2_55"
+  top: "pool2_55"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "norm2_55"
+  type: "LRN"
+  bottom: "pool2_55"
+  top: "norm2_55"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+
+
+layer {
+  name: "conv3_55"
+  type: "Convolution"
+  bottom: "norm2_55"
+  top: "conv3_55"
+  convolution_param {
+    num_output: 192
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  name: "relu3_55"
+  type: "ReLU"
+  bottom: "conv3_55"
+  top: "conv3_55"
+}
+
+layer {
+  name: "pool3_55"
+  type: "Pooling"
+  bottom: "conv3_55"
+  top: "pool3_55"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "norm3_55"
+  type: "LRN"
+  bottom: "pool3_55"
+  top: "norm3_55"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+
+layer {
+  name: "conv4_55"
+  type: "Convolution"
+  bottom: "norm3_55"
+  top: "conv4_55"
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "relu4_55"
+  type: "ReLU"
+  bottom: "conv4_55"
+  top: "conv4_55"
+}
+
+layer {
+  name: "conv5_55"
+  type: "Convolution"
+  bottom: "conv4_55"
+  top: "conv5_55"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "relu5_55"
+  type: "ReLU"
+  bottom: "conv5_55"
+  top: "conv5_55"
+}
+
+
+layer {
+  name: "fc8_coarse"
+  type: "InnerProduct"
+  bottom: "conv5_55"
+  top: "fc8_coarse"
+  inner_product_param {
+    num_output: 8000
+  }
+}
+
+
+layer {
+  name: "fc8_layout"
+  type: "InnerProduct"
+  bottom: "conv5_55"
+  top: "fc8_layout"
+  inner_product_param {
+    num_output: 300
+  }
+}
+
+
+
+layers {
+  name: "reshape_global"
+  type: "ReshapeBlock"
+  bottom: "fc8_coarse"
+  top: "reshape_global"
+  reshape_block_param {
+    new_channel: 20 
+    new_height: 20
+    new_width: 20
+    new_patch_width: 20
+    new_patch_height: 20
+  }
+}
+
+layers {
+  name: "prob_3dnorm"
+  type: "MultiSoftmax"
+  bottom: "reshape_global"
+  top: "prob_3dnorm"
+}
+
+layers {
+  name: "decode_global"
+  type: "Decode"
+  bottom: "prob_3dnorm"
+  top: "decode_global"
+  decode_param {
+    source_dict: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/codebook_20.txt"
+    source_triids: "/home/dragon123/3dnormal_joint_cnncode/models/global_model/triangles_20.txt"
+    # usesoft: true
+  }
+}
+
+layers {
+  name: "resize_global"
+  type: "Resize"
+  bottom: "decode_global"
+  top: "resize_global"
+  resize_param {
+    height: 195
+    width: 260
+  }
+}
+
+
+layers {
+  name: "norm_global"
+  type: "Norm"
+  bottom: "resize_global"
+  top: "norm_global"
+}
+
+layers {
+  name: "prob_3dnorm_2"
+  type: "Softmax"
+  bottom: "fc8_layout"
+  top: "prob_3dnorm_2"
+}
+
+
+layers {
+  top: "accuracy"
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "norm_global"
+  bottom: "prob_3dnorm_2"
+  bottom: "label"
+}
+
+
+
