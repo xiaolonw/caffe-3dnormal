@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 			strid = layoutfolder + "/" + strid;
 
 			string cmd = "cp " + strid + " " + filename2;
-			printf("%s\n", cmd.c_str());
+			//printf("%s\n", cmd.c_str());
 
 			system(cmd.c_str());
 
