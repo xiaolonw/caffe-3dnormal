@@ -13,19 +13,19 @@ namespace caffe {
 template <typename Dtype>
 void AccuracyLayer<Dtype>::LayerSetUp(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-  /*top_k_ = this->layer_param_.accuracy_param().top_k();
+  top_k_ = this->layer_param_.accuracy_param().top_k();
 
   has_ignore_label_ =
     this->layer_param_.accuracy_param().has_ignore_label();
   if (has_ignore_label_) {
     ignore_label_ = this->layer_param_.accuracy_param().ignore_label();
-  }*/
+  }
 }
 
 template <typename Dtype>
 void AccuracyLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-  /*CHECK_LE(top_k_, bottom[0]->count() / bottom[1]->count())
+  CHECK_LE(top_k_, bottom[0]->count() / bottom[1]->count())
       << "top_k must be less than or equal to the number of classes.";
   label_axis_ =
       bottom[0]->CanonicalAxisIndex(this->layer_param_.accuracy_param().axis());
@@ -44,14 +44,13 @@ void AccuracyLayer<Dtype>::Reshape(
     top_shape_per_class[0] = bottom[0]->shape(label_axis_);
     top[1]->Reshape(top_shape_per_class);
     nums_buffer_.Reshape(top_shape_per_class);
-  }*/
-  top[0]->Reshape(1, 1, 1, 1);
+  }
 }
 
 template <typename Dtype>
 void AccuracyLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
-  /*Dtype accuracy = 0;
+  Dtype accuracy = 0;
   const Dtype* bottom_data = bottom[0]->cpu_data();
   const Dtype* bottom_label = bottom[1]->cpu_data();
   const int dim = bottom[0]->count() / outer_num_;
@@ -102,7 +101,7 @@ void AccuracyLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
           nums_buffer_.cpu_data()[i] == 0 ? 0
           : top[1]->cpu_data()[i] / nums_buffer_.cpu_data()[i];
     }
-  }*/
+  }
   // Accuracy layer should not be used as a loss function.
 }
 

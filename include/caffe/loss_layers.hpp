@@ -38,7 +38,7 @@ class AccuracyLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top);
 
   virtual inline const char* type() const { return "Accuracy"; }
-  virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
 
   // If there are two top blobs, then the second blob will contain
   // accuracies per class.
