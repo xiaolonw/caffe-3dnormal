@@ -33,7 +33,7 @@ using std::vector;
 #define HEIGHT 195
 #define WIDTH  260
 #define STRIDE 13
-#define FILENUM 6
+#define FILENUM 3
 
 int CreateDir(const char *sPathName, int beg) {
 	char DirName[256];
