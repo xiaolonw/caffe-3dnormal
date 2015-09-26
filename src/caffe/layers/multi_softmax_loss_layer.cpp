@@ -82,7 +82,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
 	{
 		for(int j = 0; j < imgSize; j ++)
 		{
-			int nowlabel = static_cast<int>(label[i * imgSize + j]) - 1;
+			int nowlabel = static_cast<int>(label[i * imgSize + j]) ;//- 1;
 			bottom_diff[ i * dim + nowlabel * imgSize + j  ] -= 1;
 		}
 	}
