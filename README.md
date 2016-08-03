@@ -28,16 +28,22 @@ with file name: normals.tar.gz
 The models can be downloaded from the same folder
 
 The scripts for inference are:
+```txt
 caffe-3dnormal/3dscript/global_test/test_3dnet_global.sh (using list: testLabels_single.txt)
 caffe-3dnormal/3dscript/local_test/test_3dnet_local.sh (using list: testLabels_loc.txt)
+```
 
 For fusion network, if there is no vanishing point, use:
+```txt
 genlist_fusion2.m generate the list and then run
 caffe-3dnormal/3dscript/fusion_test/test_3dnet_local2.sh
+```
 
 If there is vanishing point calculated, use:
+```txt
 genlist_fusion.m generate the list and then run
 caffe-3dnormal/3dscript/fusion_test/test_3dnet_local.sh
+```
 
 genimgs.m can be used to visualize the results.
 
