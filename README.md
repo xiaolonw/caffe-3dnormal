@@ -8,7 +8,7 @@ This code is the implementation for training the siamese-triplet network in the 
 
 BibTeX: 
 ```txt
-@inproceedings{Wang_SSGAN2016,
+@inproceedings{Wang_deep3d_2015,
     Author = {Xiaolong Wang and David F. Fouhey and Abhinav Gupta},
     Title = {Designing Deep Networks for Surface Normal Estimation},
     Booktitle = {CVPR},
